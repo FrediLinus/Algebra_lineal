@@ -65,7 +65,19 @@ def calcular_producto_punto_vectores(entry_a,entry_b, resultado):
     except:
         resultado.config(text="Error, revisa los datos")
 
+# LOGICAS DEL SEGUNDO TEMA 
 
+#Logica de 2x2
+"""
+def calcular_ecuacion_2x2(entry_a,entry_b,entry_c,resultado):
+    try:
+        valor_x = float(entry_a.get())
+        valor_y = float(entry_b.get())
+        valor_r = float(entry_c.get())
+
+        multiplicacion =  
+
+"""
 #Funciones primer tema
 def abrir_vectores():
     ventana_vectores = tk.Toplevel()
@@ -233,7 +245,7 @@ def abrir_ecuaciones2X2():
     resultado.pack(pady=10)
     btn_calcular = tk.Button(
         ventana_ecuaciones_2X2,
-        text =" calcular",
+        text =" calcular ecuacion",
         command=lambda:calcular_producto_punto_vectores(entry_x, entry_y,entry_r, resultado)
     ) 
     btn_calcular.pack(pady=10)
