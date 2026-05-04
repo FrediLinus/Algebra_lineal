@@ -95,9 +95,6 @@ def abrir_ecuaciones3X3():
 
 
 
-
-
-
 #Funciones tercer tema a usar
 def abrir_algebra_matrices():
     ventana_resolucion_algebra = tk.Toplevel()
@@ -107,7 +104,49 @@ def abrir_algebra_matrices():
     titulo = tk.Label(ventana_resolucion_algebra,text= "Operaciones de Algebra", font =( "Arial", 13) )
     titulo.pack(pady=20)
 
-#Funcion 4 a usar
+
+    #BTNs news
+    btn_suma = tk.Button(ventana_resolucion_algebra,text = "matriz Suma", command=abrir_suma)
+    btn_suma.pack(pady=20)
+
+    btn_resta = tk.Button(ventana_resolucion_algebra, text = " Matriz resta", command=abrir_resta)
+    btn_resta.pack(pady=20)
+
+    btn_producto = tk.Button(ventana_resolucion_algebra, text = " Matriz producto", command=abrir_producto)
+    btn_producto.pack(pady=20)
+
+
+def abrir_suma():
+    ventana_suma_matrices = tk.Toplevel()
+    ventana_suma_matrices.title(" Matriz Suma")
+    ventana_suma_matrices.geometry("600x500")
+
+
+    titulo = tk.Label(ventana_suma_matrices,text="Matricez Suma a realizar ",font= ("Arial",14))
+    titulo.pack(pady=20)
+
+def abrir_resta():
+    ventana_resta_matrices = tk.Toplevel()
+    ventana_resta_matrices.title("Matriz Resta")
+    ventana_resta_matrices.geometry("600x500")
+
+    titulo = tk.Label(ventana_resta_matrices, text="Matricez Resta a realizar", font=("Arial",14 ))
+    titulo.pack(pady=20)
+
+
+def abrir_producto():
+    ventana_producto_matricez = tk.Toplevel()
+    ventana_producto_matricez.title("Matriz Producto")
+    ventana_producto_matricez.geometry("600x500")
+
+    titulo = tk.Label(ventana_producto_matricez,text="Matrices producto a realizar", font=("Arial",14))
+    titulo.pack(pady=20)
+
+
+
+
+
+#Funciones cuarto tema a usar
 def abrir_matriz_inversa():
     ventana_matriz_inversa = tk.Toplevel()
     ventana_matriz_inversa.title("Matrices Inversas")
