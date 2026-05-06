@@ -1,7 +1,8 @@
 import tkinter as tk
+import numpy as np 
 
 ventana = tk.Tk()
-ventana.title("Proyecto Álgebra Digital")
+ventana.title("Proyecto Algebra Digital")
 ventana.geometry("800x700")
 
 #Título
@@ -18,6 +19,7 @@ def calcular_suma_vectores(entry_a, entry_b, resultado):
         suma = []
         if len(vector_a) != 2 or len(vector_b) != 2:
             resultado.config(text="Error: ingresa solo 2 valores en cada vector")
+            return
         # Sumar vectores
         for a,b in zip(vector_a,vector_b):
             suma.append(a+b)
@@ -68,16 +70,62 @@ def calcular_producto_punto_vectores(entry_a,entry_b, resultado):
 # LOGICAS DEL SEGUNDO TEMA 
 
 #Logica de 2x2
-"""
-def calcular_ecuacion_2x2(entry_a,entry_b,entry_c,resultado):
+def calcular_2x2(a1, b1, c1, a2, b2, c2, resultado):
     try:
-        valor_x = float(entry_a.get())
-        valor_y = float(entry_b.get())
-        valor_r = float(entry_c.get())
+        a1 = float(a1.get())
+        b1 = float(b1.get())
+        c1 = float(c1.get())
+        a2 = float(a2.get())
+        b2 = float(b2.get())
+        c2 = float(c2.get())
 
-        multiplicacion =  
+        det = a1*b2 - a2*b1
 
-"""
+        if det == 0:
+            resultado.config(text="No tiene solución única")
+            return
+
+        x = (c1*b2 - c2*b1) / det
+        y = (a1*c2 - a2*c1) / det
+
+        resultado.config(text=f"x = {x:.2f}, y = {y:.2f}")
+
+    except:
+        resultado.config(text="Error en datos")
+
+
+#logica 3x3
+
+def calcular_3x3(x1,y1,z1,r1,x2,y2,z2,r2,x3,y3,z3,r3,resultado):
+    try:
+        x1 = float(x1.get())
+        y1 = float(y1.get())
+        z1 = float(z1.get())
+        x2 = float(x2.get())
+        y2 = float(y2.get())
+        z2 = float(z2.get())
+        x3 = float(x3.get())
+        y3 = float(y3.get())
+        z3 = float(z3.get())
+        r1 =float(r1.get())
+        r2 =float(r2.get())
+        r3 =float(r3.get())
+
+        array = np.array([
+            [x1,y1,z1],
+            [x2,y2,z2],
+            [x3,y3,z3]
+        ])
+
+        total = np.array([r1,r2,r3])
+        solucion  = np.linalg.solve(array, total)
+
+        resultado.config(text=f"x={solucion[0]:.2f}, y={solucion[1]:.2f}, z={solucion[2]:.2f}")
+
+    except:
+        resultado.config(text="Error: datos inválidos")
+
+
 #Funciones primer tema
 def abrir_vectores():
     ventana_vectores = tk.Toplevel()
@@ -216,40 +264,42 @@ def abrir_resolucion_ecuaciones():
     btn_3x3.pack(pady=10)
 
 def abrir_ecuaciones2X2():
-    ventana_ecuaciones_2X2 = tk.Toplevel()
-    ventana_ecuaciones_2X2.title("Ecuaciones 2x2")
-    ventana_ecuaciones_2X2.geometry("600x500")
-    
-    titulo = tk.Label(ventana_ecuaciones_2X2, text = "Ecuaciones 2x2 realizar", font=( "Arial",14))
+    ventana = tk.Toplevel()
+    ventana.title("Ecuaciones 2x2")
+    ventana.geometry("600x500")
+
+    titulo = tk.Label(ventana, text="Sistema de ecuaciones 2x2", font=("Arial",14))
     titulo.pack(pady=20)
 
-    # X
-    label_x = tk.Label(ventana_ecuaciones_2X2, text="Ingrese valor de X")
-    label_x.pack()
-    entry_x = tk.Entry(ventana_ecuaciones_2X2)
-    entry_x.pack()
+    #ECUACIÓN 1
+    tk.Label(ventana, text="Ecuación 1: x + y = r").pack()
 
-    # Y
-    label_y = tk.Label(ventana_ecuaciones_2X2, text="Ingrese valor de Y")
-    label_y.pack()
-    entry_y = tk.Entry(ventana_ecuaciones_2X2)
-    entry_y.pack()
+    a1 = tk.Entry(ventana)
+    a1.pack()
+    b1 = tk.Entry(ventana)
+    b1.pack()
+    c1 = tk.Entry(ventana)
+    c1.pack()
 
-    # Resultado
-    label_r = tk.Label(ventana_ecuaciones_2X2, text="Ingrese valor del resultado")
-    label_r.pack()
-    entry_r = tk.Entry(ventana_ecuaciones_2X2)
-    entry_r.pack()
+    #ECUACIÓN 2
+    tk.Label(ventana, text="Ecuación 2: x + y = r").pack()
 
-    resultado = tk.Label(ventana_ecuaciones_2X2, text="Resultado: ")
+    a2 = tk.Entry(ventana)
+    a2.pack()
+    b2 = tk.Entry(ventana)
+    b2.pack()
+    c2 = tk.Entry(ventana)
+    c2.pack()
+
+    resultado = tk.Label(ventana, text="Resultado:")
     resultado.pack(pady=10)
-    btn_calcular = tk.Button(
-        ventana_ecuaciones_2X2,
-        text =" calcular ecuacion",
-        command=lambda:calcular_producto_punto_vectores(entry_x, entry_y,entry_r, resultado)
-    ) 
-    btn_calcular.pack(pady=10)
 
+    btn = tk.Button(
+        ventana,
+        text="Calcular",
+        command=lambda: calcular_2x2(a1,b1,c1,a2,b2,c2,resultado)
+    )
+    btn.pack(pady=10)
 
 def abrir_ecuaciones3X3():
     ventana_ecuaciones_3x3 = tk.Toplevel()
@@ -258,6 +308,58 @@ def abrir_ecuaciones3X3():
 
     titulo = tk.Label(ventana_ecuaciones_3x3,text="Ecuaciones 3x3 Realizar", font=("Arial, 14"))
     titulo.pack(pady=20)
+
+    #Ecuacion1 
+    ecuacion = tk.Label(ventana_ecuaciones_3x3, text="Ecuación 2: x + y = r")
+    ecuacion.pack()
+
+    x1 = tk.Entry(ventana_ecuaciones_3x3)
+    x1.pack()
+    y1 = tk.Entry(ventana_ecuaciones_3x3)
+    y1.pack()
+    z1 = tk.Entry(ventana_ecuaciones_3x3)
+    z1.pack()
+    r1 = tk.Entry(ventana_ecuaciones_3x3)
+    r1.pack()
+
+    #ecuacion 2
+    ecuacion2 = tk.Label(ventana_ecuaciones_3x3, text="Ecuación 2: x + y = r")
+    ecuacion2.pack()
+    
+
+    x2 = tk.Entry(ventana_ecuaciones_3x3)
+    x2.pack()
+    y2 = tk.Entry(ventana_ecuaciones_3x3)
+    y2.pack()
+    z2 = tk.Entry(ventana_ecuaciones_3x3)
+    z2.pack()
+
+    r2 = tk.Entry(ventana_ecuaciones_3x3)
+    r2.pack()
+
+    #ecuacion 3
+    ecuacion3 = tk.Label(ventana_ecuaciones_3x3, text="Ecuación 3: x + y = r")
+    ecuacion3.pack()
+
+    x3 = tk.Entry(ventana_ecuaciones_3x3)
+    x3.pack()
+    y3 = tk.Entry(ventana_ecuaciones_3x3)
+    y3.pack()
+    z3 = tk.Entry(ventana_ecuaciones_3x3)
+    z3.pack()
+
+    r3 = tk.Entry(ventana_ecuaciones_3x3)
+    r3.pack()
+
+    resultado = tk.Label(ventana_ecuaciones_3x3, text="Resultado")
+    resultado.pack(pady=20)
+
+    btn = tk.Button(
+        ventana_ecuaciones_3x3,
+        text="Calcular",
+        command=lambda:calcular_3x3(x1,y1,z1,r1,x2,y2,z2,r2,x3,y3,z3,r3,resultado)
+    )
+    btn.pack(pady=5)
 
 
 
