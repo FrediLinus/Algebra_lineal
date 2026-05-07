@@ -128,229 +128,100 @@ def calcular_3x3(x1,y1,z1,r1,x2,y2,z2,r2,x3,y3,z3,r3,resultado):
 
 #generar matrices 
 
-# GENERAR MATRICES Y SUMAR
+def crear_matrices(ventana, filas, columnas):
 
-def calcular_matriz_suma(
-    entry_filas,
-    entry_columnas,
-    ventana_suma_matrices
-):
+    entradas_a = []
+    entradas_b = []
+
+    # MATRIZ A
+    tk.Label(ventana, text="Matriz A").pack()
+    frame_a = tk.Frame(ventana)
+    frame_a.pack(pady=10)
+
+    for i in range(filas):
+        fila_a = []
+        for j in range(columnas):
+            e = tk.Entry(frame_a, width=5)
+            e.grid(row=i, column=j, padx=5, pady=5)
+            fila_a.append(e)
+        entradas_a.append(fila_a)
+
+    # MATRIZ B
+    tk.Label(ventana, text="Matriz B").pack()
+    frame_b = tk.Frame(ventana)
+    frame_b.pack(pady=10)
+
+    for i in range(filas):
+        fila_b = []
+        for j in range(columnas):
+            e = tk.Entry(frame_b, width=5)
+            e.grid(row=i, column=j, padx=5, pady=5)
+            fila_b.append(e)
+        entradas_b.append(fila_b)
+
+    return entradas_a, entradas_b
+
+
+
+def sumar_matrices(entradas_a, entradas_b, filas, columnas, resultado_label):
 
     try:
+        matriz_resultado = []
 
+        for i in range(filas):
+            fila_resultado = []
+
+            for j in range(columnas):
+                valor_a = float(entradas_a[i][j].get())
+                valor_b = float(entradas_b[i][j].get())
+
+                fila_resultado.append(valor_a + valor_b)
+
+            matriz_resultado.append(fila_resultado)
+
+        resultado_label.config(text=f"Resultado:\n{matriz_resultado}")
+
+    except:
+        resultado_label.config(text="Error: revisa los datos")
+
+
+
+# Calcular suma
+
+def calcular_matriz_suma(entry_filas, entry_columnas, ventana):
+
+    try:
         filas = int(entry_filas.get())
         columnas = int(entry_columnas.get())
 
-        entradas_a = []
-        entradas_b = []
+        # Crear matrices
+        entradas_a, entradas_b = crear_matrices(ventana, filas, columnas)
 
-        # ------------------------
-        # MATRIZ A
-        # ------------------------
-
-        titulo_a = tk.Label(
-            ventana_suma_matrices,
-            text="Matriz A"
-        )
-        titulo_a.pack()
-
-        frame_a = tk.Frame(ventana_suma_matrices)
-        frame_a.pack(pady=10)
-
-        for i in range(filas):
-
-            fila_a = []
-
-            for j in range(columnas):
-
-                entrada_a = tk.Entry(
-                    frame_a,
-                    width=5
-                )
-
-                entrada_a.grid(
-                    row=i,
-                    column=j,
-                    padx=5,
-                    pady=5
-                )
-
-                fila_a.append(entrada_a)
-
-            entradas_a.append(fila_a)
-
-        # ------------------------
-        # MATRIZ B
-        # ------------------------
-
-        titulo_b = tk.Label(
-            ventana_suma_matrices,
-            text="Matriz B"
-        )
-        titulo_b.pack()
-
-        frame_b = tk.Frame(ventana_suma_matrices)
-        frame_b.pack(pady=10)
-
-        for i in range(filas):
-
-            fila_b = []
-
-            for j in range(columnas):
-
-                entrada_b = tk.Entry(
-                    frame_b,
-                    width=5
-                )
-
-                entrada_b.grid(
-                    row=i,
-                    column=j,
-                    padx=5,
-                    pady=5
-                )
-
-                fila_b.append(entrada_b)
-
-            entradas_b.append(fila_b)
-
-        # ------------------------
-        # RESULTADO
-        # ------------------------
-
-        resultado = tk.Label(
-            ventana_suma_matrices,
-            text="Resultado:"
-        )
-
+        # Label resultado
+        resultado = tk.Label(ventana, text="Resultado:")
         resultado.pack(pady=10)
 
-        # ------------------------
-        # FUNCIÓN SUMAR
-        # ------------------------
-
-        def sumar():
-
-            try:
-
-                matriz_resultado = []
-
-                for i in range(filas):
-
-                    fila_resultado = []
-
-                    for j in range(columnas):
-
-                        valor_a = float(
-                            entradas_a[i][j].get()
-                        )
-
-                        valor_b = float(
-                            entradas_b[i][j].get()
-                        )
-
-                        suma = valor_a + valor_b
-
-                        fila_resultado.append(suma)
-
-                    matriz_resultado.append(
-                        fila_resultado
-                    )
-
-                resultado.config(
-                    text=f"Resultado:\n{matriz_resultado}"
-                )
-
-            except:
-
-                resultado.config(
-                    text="Error: revisa los datos"
-                )
-
-        # ------------------------
-        # BOTÓN SUMAR
-        # ------------------------
-
+        # Botón sumar
         btn_sumar = tk.Button(
-            ventana_suma_matrices,
+            ventana,
             text="Sumar matrices",
-            command=sumar
+            command=lambda: sumar_matrices(
+                entradas_a,
+                entradas_b,
+                filas,
+                columnas,
+                resultado
+            )
         )
-
         btn_sumar.pack(pady=10)
 
     except:
-
-        error = tk.Label(
-            ventana_suma_matrices,
+        tk.Label(
+            ventana,
             text="Error en filas o columnas"
-        )
-
-        error.pack()
+        ).pack()
 
 
-# ABRIR VENTANA SUMA MATRICES
-
-def abrir_suma():
-
-    ventana_suma_matrices = tk.Toplevel()
-
-    ventana_suma_matrices.title("Matriz Suma")
-
-    ventana_suma_matrices.geometry("600x500")
-
-    titulo = tk.Label(
-        ventana_suma_matrices,
-        text="Matrices Suma a realizar",
-        font=("Arial", 14)
-    )
-
-    titulo.pack(pady=20)
-
-    # FILAS
-
-    label_filas = tk.Label(
-        ventana_suma_matrices,
-        text="Numero de filas"
-    )
-
-    label_filas.pack()
-
-    entry_filas = tk.Entry(
-        ventana_suma_matrices
-    )
-
-    entry_filas.pack()
-
-    # COLUMNAS
-
-    label_columnas = tk.Label(
-        ventana_suma_matrices,
-        text="Numero de columnas"
-    )
-
-    label_columnas.pack()
-
-    entry_columnas = tk.Entry(
-        ventana_suma_matrices
-    )
-
-    entry_columnas.pack()
-
-    # BOTÓN
-
-    btn = tk.Button(
-        ventana_suma_matrices,
-        text="Generar matrices",
-        command=lambda:
-        calcular_matriz_suma(
-            entry_filas,
-            entry_columnas,
-            ventana_suma_matrices
-        )
-    )
-
-    btn.pack(pady=10)
 
 
 #Funciones primer tema
@@ -611,39 +482,69 @@ def abrir_algebra_matrices():
     btn_producto.pack(pady=20)
 
 
+# ABRIR VENTANA SUMA MATRICES
+
 def abrir_suma():
+
     ventana_suma_matrices = tk.Toplevel()
-    ventana_suma_matrices.title(" Matriz Suma")
+
+    ventana_suma_matrices.title("Matriz Suma")
+
     ventana_suma_matrices.geometry("600x500")
 
+    titulo = tk.Label(
+        ventana_suma_matrices,
+        text="Matrices Suma a realizar",
+        font=("Arial", 14)
+    )
 
-    titulo = tk.Label(ventana_suma_matrices,text="Matricez Suma a realizar ",font= ("Arial",14))
     titulo.pack(pady=20)
 
+    # FILAS
+
     label_filas = tk.Label(
-        ventana_suma_matrices, 
+        ventana_suma_matrices,
         text="Numero de filas"
     )
+
     label_filas.pack()
 
-    entry_filas = tk.Entry(ventana_suma_matrices)
+    entry_filas = tk.Entry(
+        ventana_suma_matrices
+    )
+
     entry_filas.pack()
 
+    # COLUMNAS
+
     label_columnas = tk.Label(
-        ventana_suma_matrices, 
+        ventana_suma_matrices,
         text="Numero de columnas"
     )
+
     label_columnas.pack()
 
-    entry_columnas = tk.Entry(ventana_suma_matrices)
+    entry_columnas = tk.Entry(
+        ventana_suma_matrices
+    )
+
     entry_columnas.pack()
+
+    # BOTÓN
 
     btn = tk.Button(
         ventana_suma_matrices,
-        text="Calcular",
-        command=lambda:calcular_matriz_suma(entry_filas,entry_columnas,ventana_suma_matrices)
+        text="Generar matrices",
+        command=lambda:
+        calcular_matriz_suma(
+            entry_filas,
+            entry_columnas,
+            ventana_suma_matrices
+        )
     )
-    btn.pack(pady=5)
+
+    btn.pack(pady=10)
+
 
 def abrir_resta():
     ventana_resta_matrices = tk.Toplevel()
