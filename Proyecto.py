@@ -126,6 +126,7 @@ def calcular_3x3(x1,y1,z1,r1,x2,y2,z2,r2,x3,y3,z3,r3,resultado):
     except:
         resultado.config(text="Error: datos inválidos")
 
+#Logica del tercer tema 
 #generar matrices 
 
 def crear_matrices(ventana, filas, columnas):
@@ -221,7 +222,96 @@ def calcular_matriz_suma(entry_filas, entry_columnas, ventana):
             text="Error en filas o columnas"
         ).pack()
 
+#Generar resta matriz
 
+def crear_matriz_resta(ventana,filas,columnas):
+    entradas_a =[]
+    entradas_b = []
+
+    #matriz a 
+    tk.Label(ventana,text="Matriz A").pack()
+    frame_a = tk.Frame(ventana)
+    frame_a.pack(pady=10)
+
+    for i in range(filas):
+        filas_a = []
+        for j in range(columnas):
+            q = tk.Entry(frame_a,width=5)
+            q.grid(row=i, column=j, padx=5, pady=5)
+            filas_a.append(q)
+        entradas_a.append(filas_a)
+
+    #matriz b 
+    tk.Label(ventana,text="Matriz B").pack()
+    frame_b = tk.Frame(ventana)
+    frame_b.pack(pady=10)
+
+    for i in range(filas):
+        filas_b = []
+        for j in range(columnas):
+            e = tk.Entry(frame_b,width=5)
+            e.grid(row=i, column=j, padx=5, pady=5)
+            filas_b.append(e)
+        entradas_b.append(filas_b)
+
+
+    return entradas_a,entradas_b
+
+
+def restar_matrices(entradas_a,entradas_b,filas,columnas,resultado_label):
+    try:
+        matriz_resultado = []
+
+        for i in range(filas):
+            fila_resultado = []
+            for x in range(columnas):
+                valor_a = float(entradas_a[i][x].get())
+                valor_b = float(entradas_b[i][x].get())
+                
+                resultado_matriz = valor_a - valor_b
+
+                fila_resultado.append(resultado_matriz)
+
+            matriz_resultado.append(fila_resultado)
+
+        resultado_label.config(text=f"Resultado:\n{matriz_resultado}")
+
+    except:
+        resultado_label.config(text="Error: revisa los datos")
+
+
+def calcular_matriz_resta(entry_filas, entry_columnas, ventana):
+
+    try:
+        filas = int(entry_filas.get())
+        columnas = int(entry_columnas.get())
+
+        # Crear matrices
+        entradas_a, entradas_b = crear_matrices(ventana, filas, columnas)
+
+        # Label resultado
+        resultado = tk.Label(ventana, text="Resultado:")
+        resultado.pack(pady=10)
+
+        # Botón sumar
+        btn_sumar = tk.Button(
+            ventana,
+            text="restar matrices",
+            command=lambda: restar_matrices(
+                entradas_a,
+                entradas_b,
+                filas,
+                columnas,
+                resultado
+            )
+        )
+        btn_sumar.pack(pady=10)
+
+    except:
+        tk.Label(
+            ventana,
+            text="Error en filas o columnas"
+        ).pack()
 
 
 #Funciones primer tema
@@ -400,7 +490,10 @@ def abrir_ecuaciones2X2():
     btn.pack(pady=10)
 
 def abrir_ecuaciones3X3():
-    ventana_ecuaciones_3x3 = tk.Toplevel()
+    ventana_ecuaciones_3x3 = tk.Toplevel()#matriz a 
+    tk.Label(ventana,text="Matriz A").pack()
+    frame_a = tk.Frame(ventana)
+    frame_a.pack(pady=10)
     ventana_ecuaciones_3x3.title("Ecuaciones 3x3")
     ventana_ecuaciones_3x3.geometry("600x500")
 
@@ -554,6 +647,37 @@ def abrir_resta():
     titulo = tk.Label(ventana_resta_matrices, text="Matricez Resta a realizar", font=("Arial",14 ))
     titulo.pack(pady=20)
 
+    #filas 
+
+    label_filas = tk.Label(
+        ventana_resta_matrices,
+        text="Numero de filas"
+    )
+    label_filas.pack()
+
+    entry_filas = tk.Entry(
+        ventana_resta_matrices
+    )
+    entry_filas.pack()
+
+    #columnas
+    label_columnas = tk.Label(
+        ventana_resta_matrices,text = "Numero de columnas"
+    )
+    label_columnas.pack()
+
+
+    entry_columnas = tk.Entry(ventana_resta_matrices)
+    entry_columnas.pack()
+
+    btn = tk.Button(
+        ventana_resta_matrices,
+        text="Generar matrices",
+        command=lambda:calcular_matriz_resta(
+            entry_filas,entry_columnas,ventana_resta_matrices
+        )
+    )
+    btn.pack(pady=10)
 
 def abrir_producto():
     ventana_producto_matricez = tk.Toplevel()
