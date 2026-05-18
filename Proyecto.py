@@ -313,6 +313,137 @@ def calcular_matriz_resta(entry_filas, entry_columnas, ventana):
             text="Error en filas o columnas"
         ).pack()
 
+#Generar multiplicacion
+
+def generar_matrices_producto(ventana, filas_a, columnas_a, filas_b, columnas_b):
+    try:
+        fa = int(filas_a.get())
+        ca = int(columnas_a.get())
+        fb = int(filas_b.get())
+        cb = int(columnas_b.get())
+
+        # VALIDACIÓN IMPORTANTE
+        if ca != fb:
+            tk.Label(ventana, text="Error: columnas A deben ser iguales a filas B").pack()
+            return
+
+        # CREAR MATRICES
+        entradas_a, entradas_b = crear_matrices_producto(ventana, fa, ca, fb, cb)
+
+        resultado = tk.Label(ventana, text="Resultado:")
+        resultado.pack(pady=10)
+
+        tk.Button(
+            ventana,
+            text="Multiplicar",
+            command=lambda: multiplicacion_matrices(
+                entradas_a,
+                entradas_b,
+                fa,
+                ca,
+                cb,
+                resultado
+            )
+        ).pack()
+
+    except:
+        tk.Label(ventana, text="Error en datos").pack()
+
+        
+def crear_matrices_producto(ventana, fa, ca, fb, cb):
+
+    entradas_a = []
+    entradas_b = []
+
+    # MATRIZ A
+    tk.Label(ventana, text="Matriz A").pack()
+    frame_a = tk.Frame(ventana)
+    frame_a.pack()
+
+    for i in range(fa):
+        fila = []
+        for j in range(ca):
+            e = tk.Entry(frame_a, width=5)
+            e.grid(row=i, column=j)
+            fila.append(e)
+        entradas_a.append(fila)
+
+    # MATRIZ B
+    tk.Label(ventana, text="Matriz B").pack()
+    frame_b = tk.Frame(ventana)
+    frame_b.pack()
+
+    for i in range(fb):
+        fila = []
+        for j in range(cb):
+            e = tk.Entry(frame_b, width=5)
+            e.grid(row=i, column=j)
+            fila.append(e)
+        entradas_b.append(fila)
+
+    return entradas_a, entradas_b
+
+def multiplicacion_matrices(entradas_a, entradas_b, fa, ca, cb, resultado_label):
+    try:
+        matriz_resultado = []
+
+        for i in range(fa):
+            fila_resultado = []
+            for j in range(cb):
+                suma = 0
+                for k in range(ca):
+                    valor_a = float(entradas_a[i][k].get())
+                    valor_b = float(entradas_b[k][j].get())
+                    suma += valor_a * valor_b
+
+                fila_resultado.append(suma)
+
+            matriz_resultado.append(fila_resultado)
+
+        resultado_label.config(text=f"Resultado:\n{matriz_resultado}")
+
+    except:
+        resultado_label.config(text="Error: revisa los datos")
+
+
+def calcular_matriz_mutiplicacion(entry_filas, entry_columnas, ventana):
+
+    try:
+        filas = int(entry_filas.get())
+        columnas = int(entry_columnas.get())
+
+        # Crear matrices
+        entradas_a, entradas_b = crear_matrices(ventana, filas, columnas)
+
+        # Label resultado
+        resultado = tk.Label(ventana, text="Resultado:")
+        resultado.pack(pady=10)
+
+        # Botón sumar
+        btn_sumar = tk.Button(
+            ventana,
+            text="multiplicacion matrices",
+            command=lambda: multiplicacion_matrices(
+                entradas_a,
+                entradas_b,
+                filas,
+                columnas,
+                resultado
+            )
+        )
+        btn_sumar.pack(pady=10)
+
+    except:
+        tk.Label(
+            ventana,
+            text="Error en filas o columnas"
+        ).pack()
+
+#Logica matriz inversa 2x2 
+
+
+
+
 
 #Funciones primer tema
 def abrir_vectores():
@@ -680,14 +811,46 @@ def abrir_resta():
     btn.pack(pady=10)
 
 def abrir_producto():
-    ventana_producto_matricez = tk.Toplevel()
-    ventana_producto_matricez.title("Matriz Producto")
-    ventana_producto_matricez.geometry("600x500")
+    ventana = tk.Toplevel()
+    ventana.title("Matriz Producto")
+    ventana.geometry("600x600")
 
-    titulo = tk.Label(ventana_producto_matricez,text="Matrices producto a realizar", font=("Arial",14))
-    titulo.pack(pady=20)
+    tk.Label(ventana, text="Multiplicación de matrices", font=("Arial",14)).pack(pady=10)
 
+    # MATRIZ A
+    tk.Label(ventana, text="Matriz A").pack()
 
+    entry_filas_a = tk.Entry(ventana)
+    entry_filas_a.pack()
+    entry_filas_a.insert(0, "Filas A")
+
+    entry_columnas_a = tk.Entry(ventana)
+    entry_columnas_a.pack()
+    entry_columnas_a.insert(0, "Columnas A")
+
+    # MATRIZ B
+    tk.Label(ventana, text="Matriz B").pack()
+
+    entry_filas_b = tk.Entry(ventana)
+    entry_filas_b.pack()
+    entry_filas_b.insert(0, "Filas B")
+
+    entry_columnas_b = tk.Entry(ventana)
+    entry_columnas_b.pack()
+    entry_columnas_b.insert(0, "Columnas B")
+
+    # BOTÓN
+    tk.Button(
+        ventana,
+        text="Generar matrices",
+        command=lambda: generar_matrices_producto(
+            ventana,
+            entry_filas_a,
+            entry_columnas_a,
+            entry_filas_b,
+            entry_columnas_b
+        )
+    ).pack(pady=10)
 
 
 
@@ -707,23 +870,115 @@ def abrir_matriz_inversa():
     btn_inversa_3x3 = tk.Button(ventana_matriz_inversa, text="Matriz Inversa 3x3",command=abrir_inversa_3x3)
     btn_inversa_3x3.pack(pady=20)
 
+# FUNCIÓN
+def calcular_inversa(a1,b1,a2,b2,resultado):
+        import numpy as np
+        try:
+            A = np.array([
+                [float(a1.get()), float(b1.get())],
+                [float(a2.get()), float(b2.get())]
+            ])
+
+            inversa = np.linalg.inv(A)
+
+            resultado.config(text=f"Inversa:\n{inversa}")
+
+        except:
+            resultado.config(text="Error: matriz no válida o sin inversa")
+
 
 def abrir_inversa_2x2():
     ventana_inversa_2x2 = tk.Toplevel()
     ventana_inversa_2x2.title("Inversa 2x2")
     ventana_inversa_2x2.geometry("600x500")
 
-    titulo = tk.Label(ventana_inversa_2x2,text="Ingreso matriz inversa 2x2",font=("Arial",14))
-    titulo.pack(pady=20)
+    titulo = tk.Label(ventana_inversa_2x2, text="Ingreso matriz inversa 2x2", font=("Arial",14))
+    titulo.grid(row=0, column=0, columnspan=2, pady=20)
 
+    # MATRIZ 2x2
+    a1 = tk.Entry(ventana_inversa_2x2, width=5)
+    a1.grid(row=1, column=0)
+
+    b1 = tk.Entry(ventana_inversa_2x2, width=5)
+    b1.grid(row=1, column=1)
+
+    a2 = tk.Entry(ventana_inversa_2x2, width=5)
+    a2.grid(row=2, column=0)
+
+    b2 = tk.Entry(ventana_inversa_2x2, width=5)
+    b2.grid(row=2, column=1)
+
+
+    # BOTÓN
+    boton = tk.Button(ventana_inversa_2x2, text="Calcular inversa", command=lambda:calcular_inversa(a1, b1, a2, b2, resultado))
+    boton.grid(row=3, column=0, columnspan=2, pady=10)
+
+    # RESULTADO
+    resultado = tk.Label(ventana_inversa_2x2, text="")
+    resultado.grid(row=4, column=0, columnspan=2)
+
+def calcular_inversa_3x3(a1,b1,c1,a2,b2,c2,a3,b3,c3,resultado):
+        import numpy as np
+        try:
+            A = np.array([
+                [float(a1.get()), float(b1.get()),float(c1.get())],
+                [float(a2.get()), float(b2.get()),float(c2.get())],
+                [float(a3.get()), float(b3.get()),float(c3.get())]
+
+            ])
+
+            inversa = np.linalg.inv(A)
+
+            resultado.config(text=f"Inversa:\n{inversa}")
+
+        except:
+            resultado.config(text="Error: matriz no válida o sin inversa")
 
 def abrir_inversa_3x3():
     ventana_inversa_3x3 = tk.Toplevel()
     ventana_inversa_3x3.title(" Inversa 3x3")
     ventana_inversa_3x3.geometry("600x500")
 
-    titulo = tk.Label(ventana_inversa_3x3,text="INgreso matriz inversa 3x3", font=("Arial",14))
-    titulo.pack(pady=20)
+    titulo = tk.Label(ventana_inversa_3x3,text="Ingreso matriz inversa 3x3", font=("Arial",14))
+    titulo.grid(row=0, column=0, columnspan=3, pady=20)
+
+    # MATRIZ 3x3
+    a1 = tk.Entry(ventana_inversa_3x3, width=5)
+    a1.grid(row=1, column=0)
+
+    b1 = tk.Entry(ventana_inversa_3x3, width=5)
+    b1.grid(row=1, column=1)
+
+    c1 = tk.Entry(ventana_inversa_3x3, width=5)
+    c1.grid(row=1, column=2)
+
+    a2 = tk.Entry(ventana_inversa_3x3, width=5)
+    a2.grid(row=2, column=0)
+
+    b2 = tk.Entry(ventana_inversa_3x3, width=5)
+    b2.grid(row=2, column=1)
+
+    c2 = tk.Entry(ventana_inversa_3x3, width=5)
+    c2.grid(row=2, column=2)
+
+    a3 = tk.Entry(ventana_inversa_3x3, width=5)
+    a3.grid(row=3, column=0)
+
+    b3 = tk.Entry(ventana_inversa_3x3, width=5)
+    b3.grid(row=3, column=1)
+
+
+    c3 = tk.Entry(ventana_inversa_3x3, width=5)
+    c3.grid(row=3, column=2)
+
+
+    # BOTÓN
+    boton = tk.Button(ventana_inversa_3x3, text="Calcular inversa", command=lambda:calcular_inversa_3x3(a1, b1,c1, a2, b2, c2,a3,b3,c3 ,resultado))
+    boton.grid(row=4, column=0, columnspan=2, pady=10)
+
+    # RESULTADO
+    resultado = tk.Label(ventana_inversa_3x3, text="")
+    resultado.grid(row=5, column=0, columnspan=2)
 
 
 #BOTONES INICIALES DE MENU PRINCIPAL
